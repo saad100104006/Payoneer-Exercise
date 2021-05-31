@@ -1,0 +1,2 @@
+rootProject.name = "PaymentList"
+include ':app'
