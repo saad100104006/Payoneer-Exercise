@@ -68,7 +68,7 @@ public final class PaymentApiTest {
     }
 
     @Test
-    public final void fetch_details_and_check_response_Code_200_returned/* $FF was: fetch details and check response Code 200 returned*/() {
+    public final void check_response_code_200_returned() {
         // Assign
         MockResponse response =new  MockResponse()
                 .setResponseCode(HttpURLConnection.HTTP_OK)
@@ -96,7 +96,7 @@ public final class PaymentApiTest {
 
 
     @Test
-    public final void fetch_details_and_check_response_Code_400_returned/* $FF was: fetch details and check response Code 200 returned*/() {
+    public final void check_response_Code_400_returned() {
 
         // Assign
         MockResponse response =new  MockResponse()
@@ -125,7 +125,7 @@ public final class PaymentApiTest {
 
 
     @Test
-    public final void fetch_details_and_check_response_Code_500_returned/* $FF was: fetch details and check response Code 200 returned*/() {
+    public final void check_response_Code_500_returned() {
 
         // Assign
         MockResponse response =new  MockResponse()
