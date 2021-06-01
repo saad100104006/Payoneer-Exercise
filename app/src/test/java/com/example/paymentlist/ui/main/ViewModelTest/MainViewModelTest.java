@@ -65,7 +65,7 @@ public class MainViewModelTest {
         // Mock API response
         when(apiClient.getPaymentMethods()).thenReturn((paymentMethodsResponseObservable));
         viewModel.loadPaymentMethods();
-        verify(observer).onChanged(false);
+        verify(observer).onChanged(true);
     }
 
 
@@ -73,7 +73,7 @@ public class MainViewModelTest {
     public void testApiFetchDataError() {
         when(apiClient.getPaymentMethods()).thenReturn(Observable.error(new Throwable("Api error")));
         viewModel.loadPaymentMethods();
-        verify(observer).onChanged(true);
+        verify(observer).onChanged(false);
     }
 
     @After
