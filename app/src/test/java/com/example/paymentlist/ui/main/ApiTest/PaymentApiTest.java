@@ -3,6 +3,7 @@ package com.example.paymentlist.ui.main.ApiTest;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.Observer;
+
 import com.example.paymentlist.rest.Api;
 import com.example.paymentlist.viewmodel.MainViewModel;
 
@@ -35,11 +36,12 @@ import static junit.framework.TestCase.assertEquals;
 
 public final class PaymentApiTest {
     @NotNull
-    private final TestRule testInstantTaskExecutorRule = (TestRule)(new InstantTaskExecutorRule());
+    private final TestRule testInstantTaskExecutorRule = (TestRule) (new InstantTaskExecutorRule());
     private MainViewModel viewModel;
     @Mock
     private Observer observer;
     private MockWebServer mockWebServer;
+    CompositeDisposable compositeDisposable;
 
     @Rule
     @NotNull
@@ -50,11 +52,11 @@ public final class PaymentApiTest {
     @Before
     public final void setUp() {
         try {
-        MockitoAnnotations.initMocks(this);
-        viewModel = new MainViewModel();
-        viewModel.paymentMethodsLiveData.observeForever(observer);
-        mockWebServer = new MockWebServer();
-
+            MockitoAnnotations.initMocks(this);
+            viewModel = new MainViewModel();
+            viewModel.paymentMethodsLiveData.observeForever(observer);
+            mockWebServer = new MockWebServer();
+            compositeDisposable = new CompositeDisposable();
             mockWebServer.start();
         } catch (IOException e) {
             e.printStackTrace();
@@ -70,16 +72,14 @@ public final class PaymentApiTest {
     @Test
     public final void check_response_code_200_returned() {
         // Assign
-        MockResponse response =new  MockResponse()
+        MockResponse response = new MockResponse()
                 .setResponseCode(HttpURLConnection.HTTP_OK)
                 .setBody(new ResponseFileReader("success_response.json").getContent());
         mockWebServer.enqueue(response);
 
-        CompositeDisposable compositeDisposable = new CompositeDisposable();
-
         Disposable getPaymentMethodsDisposable = Api.getInstance().getApiServiceClient().getPaymentMethods()
                 .subscribe(getPaymentMethodsResponse -> {
-                    assertEquals(response.toString().contains("200"),getPaymentMethodsResponse.toString().contains("200"));
+                    assertEquals(response.toString().contains("200"), getPaymentMethodsResponse.toString().contains("200"));
 
                 }, throwable -> {
                     if (throwable instanceof UnknownHostException) {
@@ -99,17 +99,15 @@ public final class PaymentApiTest {
     public final void check_response_Code_400_returned() {
 
         // Assign
-        MockResponse response =new  MockResponse()
+        MockResponse response = new MockResponse()
                 .setResponseCode(HttpURLConnection.HTTP_BAD_REQUEST)
                 .setBody(new ResponseFileReader("failed_response.json").getContent());
         mockWebServer.enqueue(response);
 
 
-        CompositeDisposable compositeDisposable = new CompositeDisposable();
-
         Disposable getPaymentMethodsDisposable = Api.getInstance().getApiServiceClient().getPaymentMethods()
                 .subscribe(getPaymentMethodsResponse -> {
-                    assertEquals(response.toString().contains("400"),getPaymentMethodsResponse.toString().contains("400"));
+                    assertEquals(response.toString().contains("400"), getPaymentMethodsResponse.toString().contains("400"));
 
                 }, throwable -> {
                     if (throwable instanceof UnknownHostException) {
@@ -128,17 +126,15 @@ public final class PaymentApiTest {
     public final void check_response_Code_500_returned() {
 
         // Assign
-        MockResponse response =new  MockResponse()
+        MockResponse response = new MockResponse()
                 .setResponseCode(HttpURLConnection.HTTP_INTERNAL_ERROR)
                 .setBody(new ResponseFileReader("failed_response.json").getContent());
         mockWebServer.enqueue(response);
 
 
-        CompositeDisposable compositeDisposable = new CompositeDisposable();
-
         Disposable getPaymentMethodsDisposable = Api.getInstance().getApiServiceClient().getPaymentMethods()
                 .subscribe(getPaymentMethodsResponse -> {
-                    assertEquals(response.toString().contains("500"),getPaymentMethodsResponse.toString().contains("500"));
+                    assertEquals(response.toString().contains("500"), getPaymentMethodsResponse.toString().contains("500"));
 
                 }, throwable -> {
                     if (throwable instanceof UnknownHostException) {
