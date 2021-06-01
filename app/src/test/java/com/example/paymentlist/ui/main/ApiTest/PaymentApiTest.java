@@ -1,4 +1,4 @@
-package com.example.paymentlist.ui.main;
+package com.example.paymentlist.ui.main.ApiTest;
 
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
@@ -38,7 +38,7 @@ public final class PaymentApiTest {
     private final TestRule testInstantTaskExecutorRule = (TestRule)(new InstantTaskExecutorRule());
     private MainViewModel viewModel;
     @Mock
-    private Observer apiEmployeeObserver;
+    private Observer observer;
     private MockWebServer mockWebServer;
 
     @Rule
@@ -52,7 +52,7 @@ public final class PaymentApiTest {
         try {
         MockitoAnnotations.initMocks(this);
         viewModel = new MainViewModel();
-        viewModel.paymentMethodsLiveData.observeForever(apiEmployeeObserver);
+        viewModel.paymentMethodsLiveData.observeForever(observer);
         mockWebServer = new MockWebServer();
 
             mockWebServer.start();
@@ -156,7 +156,7 @@ public final class PaymentApiTest {
     @After
     public final void tearDown() {
         try {
-            viewModel.paymentMethodsLiveData.removeObserver(apiEmployeeObserver);
+            viewModel.paymentMethodsLiveData.removeObserver(observer);
             mockWebServer.shutdown();
         } catch (IOException e) {
             e.printStackTrace();

@@ -26,7 +26,6 @@ public class MainViewModel extends ViewModel {
     private final PaymentMethodResponseMapper paymentMethodResponseMapper = new PaymentMethodResponseMapper();
     public MutableLiveData<List<PaymentMethod>> paymentMethodsMutableLiveData = new MutableLiveData<List<PaymentMethod>>();
 
-
     public void loadPaymentMethods() {
         Disposable getPaymentMethodsDisposable = Api.getInstance().getApiServiceClient().getPaymentMethods()
                 .doOnSubscribe(disposable -> setLoadingStatus(true))
@@ -37,9 +36,9 @@ public class MainViewModel extends ViewModel {
                     paymentMethodsMutableLiveData.postValue(paymentMethods);
                 }, throwable -> {
                     if (throwable instanceof UnknownHostException) {
-                        showErrorMessage("Unable to fetch data. Please check your internet connection and try again");
+                        errorMessageSingleEvent.setValue("Unable to fetch data. Please check your internet connection and try again");
                     } else {
-                        showErrorMessage(throwable.getLocalizedMessage());
+                        errorMessageSingleEvent.setValue(throwable.getLocalizedMessage());
                     }
                     throwable.printStackTrace();
                 });
@@ -55,9 +54,11 @@ public class MainViewModel extends ViewModel {
         this.loadingStatus.postValue(loadingStatus);
     }
 
-    protected void showErrorMessage(String errorMessage) {
-        errorMessageSingleEvent.setValue(errorMessage);
+    public MutableLiveData<Boolean>getNewsListState() {
+        return loadingStatus;
     }
+
+
 
     public SingleLiveEvent<String> getErrorMessageSingleEvent() {
         return errorMessageSingleEvent;
